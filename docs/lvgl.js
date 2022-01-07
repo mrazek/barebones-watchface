@@ -1152,9 +1152,9 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
 }
 
-var STACK_BASE = 5857072,
+var STACK_BASE = 5857552,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 614192;
+    STACK_MAX = 614672;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 
@@ -4623,6 +4623,17 @@ function invoke_v(index) {
   }
 }
 
+function invoke_ii(index,a1) {
+  var sp = stackSave();
+  try {
+    return wasmTable.get(index)(a1);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0 && e !== 'longjmp') throw e;
+    _setThrew(1, 0);
+  }
+}
+
 function invoke_iiii(index,a1,a2,a3) {
   var sp = stackSave();
   try {
@@ -4638,17 +4649,6 @@ function invoke_viiiii(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
     wasmTable.get(index)(a1,a2,a3,a4,a5);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0 && e !== 'longjmp') throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_ii(index,a1) {
-  var sp = stackSave();
-  try {
-    return wasmTable.get(index)(a1);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0 && e !== 'longjmp') throw e;
@@ -4689,6 +4689,17 @@ function invoke_vi(index,a1) {
   }
 }
 
+function invoke_iii(index,a1,a2) {
+  var sp = stackSave();
+  try {
+    return wasmTable.get(index)(a1,a2);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0 && e !== 'longjmp') throw e;
+    _setThrew(1, 0);
+  }
+}
+
 function invoke_viiii(index,a1,a2,a3,a4) {
   var sp = stackSave();
   try {
@@ -4704,17 +4715,6 @@ function invoke_iiiiii(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
     return wasmTable.get(index)(a1,a2,a3,a4,a5);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0 && e !== 'longjmp') throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iii(index,a1,a2) {
-  var sp = stackSave();
-  try {
-    return wasmTable.get(index)(a1,a2);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0 && e !== 'longjmp') throw e;
